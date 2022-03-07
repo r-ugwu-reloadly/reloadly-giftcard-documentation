@@ -1,0 +1,82 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Reloadly
+  termsOfService: 'https://www.reloadly.com/terms-of-use'
+  contact:
+    email: support@reloadly.com
+    url: 'https://www.reloadly.com/'
+  # license:
+  #   name: Apache 2.0
+  #   url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  # x-logo:
+  #   url: 'https://res.cloudinary.com/fullstackmafia/image/upload/c_thumb,w_200,g_face/v1626946901/favicon_ijjlbn.png'
+  # description: Documentation is nice
+# externalDocs:
+#   description: Find out how to create a GitHub repo for your OpenAPI definition.
+#   url: 'https://github.com/Rebilly/generator-openapi-repo'
+tags:
+  - name: Access Token
+    description: Reloadly issues access tokens (also called bearer tokens) that are used to authorize API requests.
+  - name: Accounts Balance
+    description: Reloadly enables you to retrieve the balance of your account in real time while making transactions.
+  - name: Products
+    description: Reloadly provides access to various gift card products that can be ordered and redeemed.
+  - name: Redeem Instructions
+    description: Reloadly provides redeem instructions that are useful for obtaining the value of an ordered gift card. 
+  - name: Discounts
+    description: Reloadly provides access to discounts for various gift card products globally.
+  - name: Transactions
+    description: Access transaction reports and records for every gift card purchase made through your Reloadly account.
+  - name: Orders
+    description: Order any of the numerous gift card products available on Reloadly.
+    
+servers:
+  - url: https://giftcards.reloadly.com
+    description: Production
+  - url: https://giftcards-sandbox.reloadly.com
+    description: Sandbox
+paths:
+  /oauth/token:
+    $ref: paths/access-token.yaml
+    servers:
+      - url: https://auth.reloadly.com
+        description: Production
+  /accounts/balance:
+    $ref: paths/accounts-balance.yaml
+  /products:
+    $ref: paths/get-all-products.yaml
+  /products/{productid}:
+    $ref: paths/get-product-by-id.yaml
+  /countries/{countrycode}/products:
+    $ref: paths/get-product-by-iso.yaml
+  /redeem-instructions:
+    $ref: paths/get-all-redeem-instructions.yaml
+  /redeem-instructions{brandId}:
+    $ref: paths/get-redeem-instructions-by-brand-id.yaml   
+  /discounts:
+    $ref: paths/get-all-discounts.yaml
+  /products/{productId}/discounts:
+    $ref: paths/get-discount-by-product-id.yaml
+  /reports/transactions:
+    $ref: paths/get-all-transactions.yaml
+  /reports/transactions/{transactionId}:
+    $ref: paths/get-transaction-by-id.yaml
+  /orders:
+    $ref: paths/order-a-gift-card.yaml
+  /orders/transactions/{transactionId}/cards:
+    $ref: paths/get-a-redeem-code.yaml
+components:
+  securitySchemes:
+    OAuth2Credentials:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'https://auth.reloadly.com'
+          scopes:
+            'developer': To be used in production or sandbox environments
+    BearerToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Your access token is required as a bearer token in the header of every request.
